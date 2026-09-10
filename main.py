@@ -82,7 +82,20 @@ def configure_commands():
 from keep_alive import keep_alive
 
 if __name__ == "__main__":
-    configure_commands()
     keep_alive()
     print("Bot Keto Family ATIVO!")
-    bot.infinity_polling()
+    try:
+        configure_commands()
+    except Exception as e:
+        print(f"Erro ao configurar comandos: {e}")
+
+    # Loop que nunca deixa o bot morrer
+    while True:
+        try:
+            print("Iniciando polling...")
+            bot.infinity_polling(skip_pending=True, timeout=20, long_polling_timeout=20)
+        except Exception as e:
+            print(f"Bot caiu com erro: {e} - Reiniciando em 5s...")
+            import time
+            time.sleep(5)
+
